@@ -9,6 +9,12 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <style>
+    /* Fixed header: stops the page jiggling/scrolling while typing in the search box */
+    .site-header{position:fixed;top:0;left:0;right:0}
+    body{padding-top:var(--hdr,59px)}
+    .resume-frame img{display:block;width:100%;height:auto}
+  </style>
 </head>
 <body>
 <div id="progress"></div>
@@ -102,14 +108,7 @@
       <div class="sec-head"><h2 class="page-heading">Resume &amp; Experience</h2></div>
       <p class="quote center reveal" style="max-width:640px;margin:0 auto;border-left:0;border-radius:12px"><b>"The simpler you say it, the more eloquent it is."</b> - August Wilson</p>
       <div class="resume-frame reveal" id="about">
-        <div class="pdf-stage" id="pdfStage" data-src="image/sample-resume.pdf#toolbar=0&amp;navpanes=0&amp;view=FitH">
-          <div class="pdf-skeleton" id="pdfWait">Loading resume...</div>
-        </div>
-        <noscript><p>JavaScript is off. <a href="image/sample-resume.pdf">Open the resume PDF</a>.</p></noscript>
-      </div>
-      <div class="pdf-actions">
-        <a class="btn" href="image/sample-resume.pdf" target="_blank" rel="noopener">Open full PDF</a>
-        <a class="btn ghost" href="image/sample-resume.pdf" download="Aryan Verma">Download (PDF)</a>
+        <img src="image/resume.png" alt="Resume" loading="lazy">
       </div>
 
       <h3 class="worked">Worked with..</h3>
@@ -278,22 +277,6 @@
     if (e.key === "Escape") clearSearch();
   });
   
-  // ---- PDF viewer: loads only when near the screen, with fallback ----
-  (function () {
-    const stage = document.getElementById("pdfStage"), wait = document.getElementById("pdfWait");
-    function load() {
-      if (navigator.pdfViewerEnabled === false) {
-        wait.innerHTML = 'Your browser cannot show PDFs inline.<br><a class="btn" href="image/sample-resume.pdf" target="_blank" rel="noopener">Open resume PDF</a>';
-        return;
-      }
-      const f = document.createElement("iframe");
-      f.title = "Resume"; f.src = stage.dataset.src;
-      f.onload = () => wait.remove();
-      stage.append(f);
-    }
-    new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { load(); o.disconnect(); } }, { rootMargin: "500px" }).observe(stage);
-  })();
-
   // ---- Album: auto-rotating coverflow ----
   (function () {
     const root = document.getElementById("cf"), items = [...root.querySelectorAll(".cf-item")], n = items.length;
