@@ -15,6 +15,41 @@
     body{padding-top:var(--hdr,59px)}
     .resume-frame img{display:block;width:100%;height:auto}
   </style>
+  <style>
+    /* ---- Chat assistant ---- */
+    #rmChat{--rm-bg:#fff;--rm-fg:#1f2430;--rm-muted:#6b7280;--rm-line:#e5e7eb;--rm-acc:#2563eb;--rm-acc-fg:#fff;--rm-bot:#f1f3f7;position:fixed;left:18px;bottom:18px;z-index:1000;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;font-size:14px;line-height:1.45}
+    [data-theme="dark"] #rmChat{--rm-bg:#1b1f2a;--rm-fg:#e8eaf0;--rm-muted:#9aa3b2;--rm-line:#2c3342;--rm-acc:#4f8cff;--rm-bot:#272d3b}
+    #rmChat *{box-sizing:border-box}
+    #rmChat .rm-launch{display:flex;align-items:center;gap:8px;border:0;cursor:pointer;background:var(--rm-acc);color:var(--rm-acc-fg);padding:11px 16px;border-radius:999px;font:600 14px/1 inherit;font-family:inherit;box-shadow:0 6px 20px rgba(0,0,0,.25);transition:transform .15s}
+    #rmChat .rm-launch:hover{transform:translateY(-2px)}
+    #rmChat .rm-launch svg{width:20px;height:20px}
+    #rmChat .rm-panel{position:absolute;left:0;bottom:56px;width:min(360px,calc(100vw - 36px));height:min(520px,calc(100vh - 110px));display:flex;flex-direction:column;background:var(--rm-bg);color:var(--rm-fg);border:1px solid var(--rm-line);border-radius:16px;box-shadow:0 16px 48px rgba(0,0,0,.28);overflow:hidden}
+    #rmChat .rm-panel[hidden]{display:none}
+    #rmChat .rm-head{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--rm-acc);color:var(--rm-acc-fg)}
+    #rmChat .rm-head img{width:34px;height:34px;border-radius:50%;object-fit:cover;background:#fff}
+    #rmChat .rm-title{flex:1;display:flex;flex-direction:column;min-width:0}
+    #rmChat .rm-title b{font-size:14px}
+    #rmChat .rm-title span{font-size:11.5px;opacity:.85}
+    #rmChat .rm-hbtn{border:0;background:transparent;color:inherit;font-size:20px;line-height:1;cursor:pointer;padding:4px 7px;border-radius:8px}
+    #rmChat .rm-hbtn:hover{background:rgba(255,255,255,.2)}
+    #rmChat .rm-log{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:8px}
+    #rmChat .rm-msg{max-width:84%;padding:9px 12px;border-radius:14px;white-space:pre-wrap;word-wrap:break-word}
+    #rmChat .rm-msg.bot{align-self:flex-start;background:var(--rm-bot);border-bottom-left-radius:4px}
+    #rmChat .rm-msg.me{align-self:flex-end;background:var(--rm-acc);color:var(--rm-acc-fg);border-bottom-right-radius:4px}
+    #rmChat .rm-msg.err{background:#fde8e8;color:#9b1c1c}
+    #rmChat .rm-chips{display:flex;flex-wrap:wrap;gap:6px;padding:0 14px 8px}
+    #rmChat .rm-chips:empty{display:none}
+    #rmChat .rm-chip{border:1px solid var(--rm-acc);background:transparent;color:var(--rm-acc);padding:6px 12px;border-radius:999px;font:500 13px inherit;font-family:inherit;cursor:pointer}
+    #rmChat .rm-chip:hover{background:var(--rm-acc);color:var(--rm-acc-fg)}
+    #rmChat .rm-bar{display:flex;align-items:flex-end;gap:8px;padding:10px;border-top:1px solid var(--rm-line)}
+    #rmChat .rm-input{flex:1;resize:none;max-height:96px;border:1px solid var(--rm-line);background:var(--rm-bg);color:var(--rm-fg);border-radius:12px;padding:9px 11px;font:inherit;outline:none}
+    #rmChat .rm-input:focus{border-color:var(--rm-acc)}
+    #rmChat .rm-send{width:40px;height:40px;padding:0;border:0;border-radius:12px;background:var(--rm-acc);color:var(--rm-acc-fg);display:grid;place-items:center;cursor:pointer}
+    #rmChat .rm-send svg{width:18px;height:18px}
+    #rmChat .rm-send:disabled,#rmChat .rm-input:disabled{opacity:.5;cursor:not-allowed}
+    #rmChat .rm-typing{align-self:flex-start;color:var(--rm-muted);font-size:12px}
+    @media (prefers-reduced-motion:reduce){#rmChat .rm-launch{transition:none}}
+  </style>
 </head>
 <body>
 <div id="progress"></div>
@@ -22,10 +57,11 @@
 <header class="site-header">
   <div class="wrap bar">
     <a href="index.html" class="brand"><img src="image/site-logo.jpg" alt="Logo">Aryan Verma</a>
-    <nav class="nav" aria-label="Main">
+   <nav class="nav" aria-label="Main">
       <a href="index.html" class="active">Home<span>You are here...</span></a>
       <a href="#album">Album<span>See my photos</span></a>
       <a href="#resume">About Me<span>Go to About Page</span></a>
+      <a href="#organizations">Organizations<span>Where I've worked</span></a>
       <a href="#contact">Contact Me<span>Go to Contact Page</span></a>
     </nav>
     <div class="search">
@@ -111,12 +147,48 @@
         <img src="image/resume.png" alt="Resume" loading="lazy">
       </div>
 
-      <h3 class="worked">Worked with..</h3>
+      <!--h3 class="worked">Worked with..</h3>
       <div class="logos imagewtr reveal">
         <div class="imagewtc"><img src="image/company-a.jpg" alt="Company A"></div>
         <div class="imagewtc"><img src="image/company-b.jpg" alt="Company B"></div>
         <div class="imagewtc"><img src="image/company-c.jpg" alt="Company C"></div>
         <div class="imagewtc"><img src="image/company-d.jpg" alt="Company D"></div>
+      </div-->
+    </div>
+  </section>
+
+    <!-- ORGANIZATIONS -->
+  <section id="organizations">
+    <div class="wrap">
+      <div class="sec-head"><h2 class="page-heading">Organizations I've Worked With</h2></div>
+      <div class="orgs reveal">
+        <!-- To add details for an organization, add <p class="org-role">Job title</p> and <p class="org-period">2021 - 2023</p> after its <h3>. -->
+        <article class="org current">
+          <span class="org-badge">Current</span>
+          <a class="org-logo" href="https://example.com" target="_blank" rel="noopener" title="Brightwave"><img src="image/brightwave.gif" alt="Brightwave logo"></a>
+          <h3>Brightwave</h3>
+          <p class="org-role">Sr Software Developer</p>
+        </article>
+        <article class="org">
+          <div class="org-logo"><img src="image/company-a.jpg" alt="company-a logo"></div>
+          <h3>Company-A</h3>
+     <p class="org-role">Junior Trainee</p>
+        </article>
+        <article class="org">
+          <div class="org-logo"><img src="image/company-b.jpg" alt="company-b logo"></div>
+          <h3>Company-B</h3>
+     <p class="org-role">Junior Developer</p>
+        </article>
+        <article class="org">
+          <div class="org-logo"><img src="image/company-c.jpg" alt="company-c logo"></div>
+          <h3>Company-C</h3>
+     <p class="org-role">Intern</p>
+        </article>
+        <article class="org">
+          <div class="org-logo"><img src="image/company-d.jpg" alt="company-d logo"></div>
+          <h3>Company-D</h3>
+     <p class="org-role">Intern</p>
+        </article>
       </div>
     </div>
   </section>
@@ -165,6 +237,30 @@
 <button onclick="topFunction()" id="myBtn1" class="btn" title="Go to top">&#8593; Scroll UP</button>
 
 <div id="lightbox" onclick="this.classList.remove('open')"><button class="x" aria-label="Close">&times;</button><img alt=""></div>
+
+<!-- Chat assistant: collects a message and sends it via the Get in Touch form -->
+<div id="rmChat">
+  <button type="button" class="rm-launch" aria-expanded="false" aria-controls="rmPanel">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.5-4.6A8 8 0 1 1 21 12z"/></svg>
+    <span>Message Aryan</span>
+  </button>
+  <section class="rm-panel" id="rmPanel" role="dialog" aria-label="Chat with Aryan's assistant" hidden>
+    <div class="rm-head">
+      <img src="image/site-logo.jpg" alt="">
+      <div class="rm-title"><b>Aryan's assistant</b><span>Passes your message to Aryan</span></div>
+      <button type="button" class="rm-hbtn rm-restart" aria-label="Start over" title="Start over">&#8635;</button>
+      <button type="button" class="rm-hbtn rm-close" aria-label="Close chat" title="Close">&times;</button>
+    </div>
+    <div class="rm-log" role="log" aria-live="polite"></div>
+    <div class="rm-chips"></div>
+    <div class="rm-bar">
+      <textarea class="rm-input" rows="1" maxlength="1500" aria-label="Type your message" placeholder="Type a message"></textarea>
+      <button type="button" class="btn rm-send" aria-label="Send">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/></svg>
+      </button>
+    </div>
+  </section>
+</div>
 
 <script>
   function openBox(b) {
@@ -236,7 +332,7 @@
 
     const re = new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi");
     const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
-      acceptNode: n => (!n.nodeValue.trim() || n.parentElement.closest("header,script,style,textarea,iframe,noscript,#lightbox")) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT
+      acceptNode: n => (!n.nodeValue.trim() || n.parentElement.closest("header,script,style,textarea,iframe,noscript,#lightbox,#rmChat")) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT
     });
     const nodes = []; while (walker.nextNode()) nodes.push(walker.currentNode);
     nodes.forEach(node => {
@@ -350,6 +446,103 @@
   let saved = null; try { saved = localStorage.getItem("theme"); } catch (e) {}
   setTheme(saved || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"));
   themeBtn.onclick = () => setTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
+</script>
+<script>
+  // ---- Chat assistant: gathers message, name, email, number, then submits via the Get in Touch form ----
+  (function () {
+    const root = document.getElementById("rmChat"), panel = root.querySelector(".rm-panel");
+    const launch = root.querySelector(".rm-launch"), log = root.querySelector(".rm-log");
+    const chips = root.querySelector(".rm-chips"), input = root.querySelector(".rm-input"), sendBtn = root.querySelector(".rm-send");
+    const form = document.querySelector("#contact form");
+    let step = "topic", data = {}, busy = false;
+
+    function add(text, who, extra) {
+      const m = document.createElement("div");
+      m.className = "rm-msg " + who + (extra ? " " + extra : "");
+      m.textContent = text; log.append(m); log.scrollTop = log.scrollHeight; return m;
+    }
+    function setChips(list) {
+      chips.innerHTML = "";
+      list.forEach(([label, fn]) => {
+        const b = document.createElement("button"); b.type = "button"; b.className = "rm-chip"; b.textContent = label;
+        b.onclick = () => { if (busy) return; chips.innerHTML = ""; add(label, "me"); fn(label); };
+        chips.append(b);
+      });
+    }
+    function bot(text, then, delay) {
+      busy = true; input.disabled = sendBtn.disabled = true;
+      const t = document.createElement("div"); t.className = "rm-typing"; t.textContent = "typing..."; log.append(t); log.scrollTop = log.scrollHeight;
+      setTimeout(() => { t.remove(); add(text, "bot"); busy = false; input.disabled = sendBtn.disabled = false; input.focus(); if (then) then(); }, delay || 450);
+    }
+
+    function start() {
+      log.innerHTML = ""; chips.innerHTML = ""; data = {}; step = "topic"; input.value = ""; resize();
+      bot("Hi! I can pass a message on to Aryan. What is it about?", () => setChips([
+        ["Job opportunity", pickTopic], ["Project / freelance", pickTopic], ["Just saying hi", pickTopic]
+      ]));
+    }
+    function pickTopic(t) { data.topic = t; step = "message"; bot("Got it. What would you like to tell Aryan?"); }
+
+    function askConfirm() {
+      step = "confirm";
+      bot("Here is what I will send:\n\nName: " + data.name + "\nEmail: " + data.email + "\nNumber: " + data.number + "\nTopic: " + data.topic + "\nMessage: " + data.message,
+        () => setChips([["Send it", submit], ["Start over", start]]));
+    }
+
+    async function submit() {
+      if (!form) { add("Sorry, the contact form was not found. Please use the Contact Me section.", "bot", "err"); return; }
+      busy = true; input.disabled = sendBtn.disabled = true;
+      const wait = add("Sending...", "bot");
+      try {
+        const fd = new FormData();
+        fd.append("access_key", form.querySelector('[name="access_key"]').value);
+        fd.append("name", data.name); fd.append("email", data.email); fd.append("number", data.number);
+        fd.append("message", "[" + data.topic + "] " + data.message);
+        fd.append("subject", "New chat message from portfolio");
+        const res = await fetch(form.action, { method: "POST", headers: { Accept: "application/json" }, body: fd });
+        const j = await res.json().catch(() => ({}));
+        if (!res.ok || j.success === false) throw new Error(j.message || "Request failed");
+        wait.remove(); step = "done"; busy = false;
+        add("Thanks, " + data.name.split(" ")[0] + "! Your message has been sent. Aryan will reply soon.", "bot");
+        setChips([["Send another message", start]]);
+      } catch (e) {
+        wait.remove(); busy = false; input.disabled = sendBtn.disabled = false;
+        add("Sorry, that did not go through. Please try again, or use the form in the Contact Me section.", "bot", "err");
+        setChips([["Try again", submit], ["Start over", start]]);
+      }
+    }
+
+    function handle() {
+      const v = input.value.trim(); if (!v || busy) return;
+      if (step === "done" || step === "confirm") return;
+      input.value = ""; resize(); chips.innerHTML = ""; add(v, "me");
+      if (step === "topic") { pickTopic(v); return; }
+      if (step === "message") { data.message = v; step = "name"; bot("Thanks! What is your name?"); }
+      else if (step === "name") { data.name = v.slice(0, 80); step = "email"; bot("Nice to meet you, " + data.name.split(" ")[0] + ". What is your email address?"); }
+      else if (step === "email") {
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)) { bot("That email does not look right. Could you check it?"); return; }
+        data.email = v; step = "number"; bot("And your phone number?");
+      } else if (step === "number") {
+        const d = v.replace(/[^\d]/g, "");
+        if (d.length < 7 || d.length > 15) { bot("Please enter a valid phone number (7 to 15 digits)."); return; }
+        data.number = d; askConfirm();
+      }
+    }
+
+    function resize() { input.style.height = "auto"; input.style.height = Math.min(input.scrollHeight, 96) + "px"; }
+    function toggle(open) {
+      panel.hidden = !open; launch.setAttribute("aria-expanded", open);
+      if (open) { if (!log.children.length) start(); input.focus(); }
+    }
+
+    launch.onclick = () => toggle(panel.hidden);
+    root.querySelector(".rm-close").onclick = () => { toggle(false); launch.focus(); };
+    root.querySelector(".rm-restart").onclick = start;
+    sendBtn.onclick = handle;
+    input.addEventListener("input", resize);
+    input.addEventListener("keydown", e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handle(); } });
+    document.addEventListener("keydown", e => { if (e.key === "Escape" && !panel.hidden && document.activeElement && root.contains(document.activeElement)) toggle(false); });
+  })();
 </script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-:root{
+:root{ 
   --ink:#0f1b3d; --muted:#51607f; --bg:#f4f8fc; --card:#ffffff; --line:#dbe4f0;
   --brand:#2f5bff; --brand-2:#7a4dff; --sky:#aedaed; --go:#12ec74;
   --shadow:0 8px 24px rgba(15,27,61,.08); --radius:14px;
@@ -70,7 +70,7 @@ section{padding:52px 0}
 
 /* Resume */
 .alt{background:color-mix(in srgb,var(--brand) 5%,var(--bg))}
-.resume-frame{width:min(820px,80%);margin:22px auto 0;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);background:#282828;padding:0}
+.resume-frame{width:min(920px,100%);margin:22px auto 0;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);background:#282828;padding:0}
 .pdf-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px}
 #lightbox{position:fixed;inset:0;z-index:300;background:rgba(5,10,25,.88);display:none;align-items:center;justify-content:center;padding:20px}
 #lightbox.open{display:flex}
@@ -151,17 +151,105 @@ mark.hit.current{background:#ff9f43;box-shadow:0 0 0 3px rgba(255,159,67,.45)}
 .cf-dots button.on{width:22px;border-radius:8px;background:var(--brand)}
 @media (max-width:600px){.coverflow{padding:0 8px}.cf-stage{height:320px}.cf-nav{top:auto;bottom:-6px}.cf-nav.prev{left:8px}.cf-nav.next{right:8px}.cf-dots{margin-top:12px}}
 @media (prefers-reduced-motion:reduce){.cf-item{transition:none}}
-/* Resume: 3D view pane + shloka tag */
-#resume .wrap{perspective:1600px}
-.resume-frame.reveal.in{transform:rotateX(4deg) translateZ(0);transform-origin:50% 0;box-shadow:0 30px 60px rgba(15,27,61,.35),0 12px 24px rgba(47,91,255,.22),0 0 0 1px rgba(255,255,255,.06);transition:transform .6s ease,box-shadow .6s ease}
-.resume-frame.reveal.in:hover{transform:rotateX(0) translateY(-6px);box-shadow:0 40px 80px rgba(15,27,61,.42),0 16px 32px rgba(47,91,255,.30)}
+/* Resume: flat, static frame + shloka tag */
 .shloka{display:flex;justify-content:center;margin:22px auto 4px}
 .shloka-text{position:relative;display:inline-block;padding:10px 30px;border-radius:999px;font-family:"Noto Sans Devanagari","Mukta","Nirmala UI","Kohinoor Devanagari",sans-serif;font-weight:800;font-size:clamp(1.15rem,2.6vw,1.6rem);letter-spacing:.02em;color:#0f1b3d;background:linear-gradient(100deg,#fff1a8,#ffe066 40%,#ffb347 70%,#ffe066);background-size:200% 100%;border:2px solid #fff;box-shadow:0 8px 22px rgba(255,159,67,.45),0 0 0 4px color-mix(in srgb,var(--brand) 22%,transparent);animation:shlokaShine 4s linear infinite}
 .shloka-text::before,.shloka-text::after{content:"\2726";position:absolute;top:50%;transform:translateY(-50%);color:var(--brand);font-size:.9rem}
 .shloka-text::before{left:11px}.shloka-text::after{right:11px}
 @keyframes shlokaShine{to{background-position:-200% 0}}
-@media (prefers-reduced-motion:reduce){.shloka-text{animation:none}.resume-frame.reveal.in{transition:none}}
+@media (prefers-reduced-motion:reduce){.shloka-text{animation:none}}
 
 /* Fixed header (prevents page scroll jiggle while typing in the search box) */
 .site-header{position:fixed;top:0;left:0;right:0}
 body{padding-top:var(--hdr,59px)}
+
+/* ===== Chat assistant: collects a message and sends it to the owner ===== */
+#rmChat{position:fixed;left:16px;bottom:20px;z-index:150}
+#rmChat .rm-launch{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border:0;border-radius:999px;cursor:pointer;font:inherit;font-weight:600;font-size:.88rem;color:#fff;background:linear-gradient(100deg,var(--brand),var(--brand-2));box-shadow:0 10px 26px rgba(47,91,255,.38);transition:transform .2s,box-shadow .2s}
+#rmChat .rm-launch:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(47,91,255,.46)}
+#rmChat .rm-launch svg{width:20px;height:20px;flex:none}
+
+#rmChat .rm-panel{padding:0;position:absolute;left:0;bottom:calc(100% + 12px);width:min(380px,calc(100vw - 32px));height:min(780px,calc(100vh - 150px));height:min(780px,calc(100dvh - 150px));display:flex;flex-direction:column;background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:0 24px 60px rgba(15,27,61,.28);overflow:hidden;transform-origin:0 100%;animation:rmIn .22s ease-out}
+#rmChat .rm-panel[hidden]{display:none}
+@keyframes rmIn{from{opacity:0;transform:translateY(10px) scale(.97)}}
+
+#rmChat .rm-head{display:flex;align-items:center;gap:10px;padding:12px 14px;color:#fff;background:linear-gradient(100deg,var(--brand),var(--brand-2))}
+#rmChat .rm-head img{width:36px;height:36px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,.7);background:#fff}
+#rmChat .rm-title{flex:1;min-width:0;line-height:1.25}
+#rmChat .rm-title b{display:block;font-family:"Sora","Inter",sans-serif;font-size:.95rem}
+#rmChat .rm-title span{display:flex;align-items:center;gap:6px;font-size:.75rem;opacity:.9}
+#rmChat .rm-title span::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--go)}
+#rmChat .rm-hbtn{width:32px;height:32px;display:grid;place-items:center;border:0;border-radius:50%;background:transparent;color:#fff;font-size:1.15rem;line-height:1;cursor:pointer}
+#rmChat .rm-hbtn:hover{background:rgba(255,255,255,.2)}
+#rmChat .rm-head :focus-visible{outline-color:#fff}
+
+#rmChat .rm-log{flex:1;overflow-y:auto;padding:16px 14px 8px;display:flex;flex-direction:column;gap:8px;background:var(--bg)}
+#rmChat .rm-msg{max-width:86%;padding:9px 13px;border-radius:16px;font-size:.88rem;line-height:1.45;white-space:pre-wrap;overflow-wrap:anywhere}
+#rmChat .rm-msg.bot{align-self:flex-start;background:var(--card);border:1px solid var(--line);border-bottom-left-radius:5px;color:var(--ink)}
+#rmChat .rm-msg.user{align-self:flex-end;background:var(--brand);color:#fff;border-bottom-right-radius:5px}
+#rmChat .rm-card{white-space:normal;max-width:94%}
+#rmChat .rm-card p{margin:0 0 8px;color:var(--muted)}
+#rmChat .rm-card dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:4px 12px}
+#rmChat .rm-card dt{color:var(--muted)}
+#rmChat .rm-card dd{margin:0;font-weight:500;white-space:pre-wrap;overflow-wrap:anywhere}
+#rmChat .rm-typing{align-self:flex-start;display:flex;gap:4px;padding:12px 14px;background:var(--card);border:1px solid var(--line);border-radius:16px;border-bottom-left-radius:5px}
+#rmChat .rm-typing i{width:6px;height:6px;border-radius:50%;background:var(--muted);animation:rmDot 1s infinite ease-in-out}
+#rmChat .rm-typing i:nth-child(2){animation-delay:.15s}
+#rmChat .rm-typing i:nth-child(3){animation-delay:.3s}
+@keyframes rmDot{0%,80%,100%{opacity:.3;transform:translateY(0)}40%{opacity:1;transform:translateY(-3px)}}
+
+#rmChat .rm-chips{display:flex;flex-wrap:wrap;gap:5px;padding:2px 14px 10px;background:var(--bg)}
+#rmChat .rm-chips:empty{display:none}
+#rmChat .rm-chip{font:inherit;font-size:.72rem;line-height:1.4;font-weight:600;padding:3px 10px;animation:rmPop .22s ease-out both;animation-delay:calc(var(--i,0) * 45ms);border-radius:999px;cursor:pointer;color:var(--brand);background:var(--card);border:1px solid var(--brand);transition:background .15s,color .15s}
+#rmChat .rm-chip:hover,#rmChat .rm-chip.primary{background:var(--brand);color:#fff}
+#rmChat .rm-chip.primary:hover{background:#1f48e6}
+
+#rmChat .rm-bar{display:flex;align-items:flex-end;gap:8px;padding:10px 12px;border-top:1px solid var(--line);background:var(--card)}
+#rmChat .rm-input{flex:1;height:38px;max-height:96px;resize:none;font:inherit;font-size:.9rem;line-height:1.4;padding:8px 13px;border:1px solid var(--line);border-radius:14px;background:var(--bg);color:var(--ink)}
+#rmChat .rm-input:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px color-mix(in srgb,var(--brand) 25%,transparent)}
+#rmChat .rm-send{width:38px;height:38px;padding:0;flex:none}
+#rmChat .rm-send svg{width:18px;height:18px}
+
+@media (max-width:600px){
+  #rmChat{left:12px;bottom:16px}
+  #rmChat .rm-launch{padding:13px}
+  #rmChat .rm-launch span{display:none}
+  #rmChat .rm-panel{position:fixed;inset:0;width:auto;height:auto;border:0;border-radius:0}
+}
+@keyframes rmPop{from{opacity:0;transform:scale(.8)}}
+@media (prefers-reduced-motion:reduce){#rmChat .rm-panel,#rmChat .rm-typing i,#rmChat .rm-chip{animation:none}}
+
+/* ===== Organizations ===== */
+.orgs{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:18px}
+.org{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;padding:20px 16px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.org.current{border-color:var(--brand)}
+.org-logo{display:flex;align-items:center;justify-content:center;width:100%;min-height:84px;padding:12px;margin-bottom:6px;background:#fff;border:1px solid var(--line);border-radius:10px}
+.org-logo img{max-height:56px;width:auto;max-width:100%;object-fit:contain}
+.org h3{font-size:1.05rem;color:var(--ink)}
+.org-role{margin:0;font-size:.85rem;color:var(--muted)}
+.org-period{margin:0;font-size:.78rem;color:var(--muted)}
+.org-badge{position:absolute;top:10px;right:10px;z-index:1;padding:2px 10px;border-radius:999px;font-size:.7rem;font-weight:600;color:#0f1b3d;background:var(--go)}
+
+/* Chat: organizations list + resume links */
+#rmChat .rm-orgs{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+#rmChat .rm-org{display:flex;align-items:center;gap:10px;padding:6px 8px;background:var(--bg);border:1px solid var(--line);border-radius:12px}
+#rmChat .rm-org.current{border-color:var(--brand)}
+#rmChat .rm-org-logo{flex:none;width:52px;height:36px;display:flex;align-items:center;justify-content:center;padding:3px;background:#fff;border:1px solid var(--line);border-radius:8px}
+#rmChat .rm-org-logo img{max-width:100%;max-height:100%;object-fit:contain}
+#rmChat .rm-org-text{flex:1;min-width:0;line-height:1.3}
+#rmChat .rm-org-text b{display:block;font-size:.86rem}
+#rmChat .rm-org-text span{display:block;font-size:.75rem;color:var(--muted)}
+#rmChat .rm-org-tag{flex:none;font-size:.66rem;font-weight:600;padding:1px 9px;border-radius:999px;background:var(--go);color:#0f1b3d}
+#rmChat .rm-links{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+#rmChat a.rm-chip{display:inline-block;text-decoration:none}
+
+/* Chat docked on the left (wide screens, set from script.js): the page shifts right
+   instead of being covered, so the page and the chat are both fully usable. */
+html.rm-docked body{margin-left:380px}
+html.rm-docked .site-header{left:380px}
+html.rm-docked #rmChat .rm-launch{display:none}
+html.rm-docked #rmChat .rm-panel{position:fixed;left:0;top:0;bottom:0;width:380px;height:auto;border-width:0 1px 0 0;border-radius:0;box-shadow:6px 0 24px rgba(15,27,61,.12);animation:none}
+
+/* Resume frame: normal flat view with a fixed border and shadow (no tilt, no hover movement) */
+.resume-frame{border:1px solid var(--line);box-shadow:0 10px 28px rgba(15,27,61,.18)}
+ 
